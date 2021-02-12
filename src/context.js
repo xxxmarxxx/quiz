@@ -10,7 +10,7 @@ const table = {
 const API_ENDPOINT = "https://opentdb.com/api.php?";
 
 const url = "";
-const templUrl =
+const tempUrl =
   "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple";
 const AppContext = React.createContext();
 
@@ -48,7 +48,7 @@ const AppProvider = ({ children }) => {
     setIndex((oldIndex) => {
       const index = oldIndex + 1;
       if (index > questions.length - 1) {
-        //openModal()
+        openModal();
         return 0;
       } else {
         return index;
@@ -56,15 +56,23 @@ const AppProvider = ({ children }) => {
     });
   };
 
-const checkAnswer = (value)=>{
-if(value){
-  setCorrect((oldState)=>oldState +1)
-}
-nextQuestion()
-}
+  const checkAnswer = (value) => {
+    if (value) {
+      setCorrect((oldState) => oldState + 1);
+    }
+    nextQuestion();
+  };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setWaiting(true);
+    setCorrect(0);
+    setIsModalOpen(false);
+  };
   useEffect(() => {
-    fetchQuestions(templUrl);
+    fetchQuestions(tempUrl);
   }, []);
 
   return (
@@ -79,6 +87,7 @@ nextQuestion()
         isModalOpen,
         nextQuestion,
         checkAnswer,
+        closeModal,
       }}
     >
       {children}
